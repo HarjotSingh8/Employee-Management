@@ -1,14 +1,15 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import React from "react";
+import ReactDOM from "react-dom";
+import App from "./components/App";
+import * as serviceWorker from "./serviceWorker";
+
+import User, { UserContext } from "./components/UserContext";
 
 ReactDOM.render(
-  <React.StrictMode>
+  <UserContext.Provider value={new User()}>
     <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+  </UserContext.Provider>,
+  document.getElementById("root")
 );
 
 // If you want your app to work offline and load faster, you can change
