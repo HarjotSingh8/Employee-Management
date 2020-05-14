@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { withUserContext } from "./UserContext";
+import { withStitch } from "./Stitch";
 
 class Home extends Component {
   componentDidMount() {
@@ -16,9 +17,20 @@ class Home extends Component {
         >
           update user
         </button>
+        <button
+          onClick={async () => {
+            let user = await this.props.stitch.logInAnonymously();
+
+            console.log(user);
+            this.props.user.updateContext(user);
+            console.log(this.props);
+          }}
+        >
+          login anonymously
+        </button>
       </div>
     );
   }
 }
-
-export default withUserContext(Home);
+let HomeWithUser = withUserContext(Home);
+export default withStitch(HomeWithUser);

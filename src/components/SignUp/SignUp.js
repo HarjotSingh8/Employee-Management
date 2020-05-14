@@ -25,6 +25,7 @@ class AuthPage extends Component {
       .then((result) => {
         if (result) {
           this.setState({ isAuth: true });
+          this.props.user.updateContext(result);
         }
       })
       .catch((err) => {

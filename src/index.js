@@ -4,11 +4,14 @@ import App from "./components/App";
 import * as serviceWorker from "./serviceWorker";
 
 import User, { UserContext } from "./components/UserContext";
+import StitchClass, { StitchContext } from "./components/Stitch";
 
 ReactDOM.render(
-  <UserContext.Provider value={new User()}>
-    <App />
-  </UserContext.Provider>,
+  <StitchContext.Provider value={new StitchClass()}>
+    <UserContext.Provider value={new User()}>
+      <App />
+    </UserContext.Provider>
+  </StitchContext.Provider>,
   document.getElementById("root")
 );
 

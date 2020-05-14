@@ -1,6 +1,9 @@
 import React, { Component } from "react";
-import Home from "./Home";
 import { withUserContext } from "./UserContext";
+import { withStitch } from "./Stitch";
+
+import Home from "./Home";
+
 class App extends Component {
   render() {
     return (
