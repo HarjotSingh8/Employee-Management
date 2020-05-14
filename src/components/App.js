@@ -3,6 +3,7 @@ import { withUserContext } from "./UserContext";
 import { withStitch } from "./Stitch";
 
 import Home from "./Home";
+import SignUp from "./SignUp";
 
 class App extends Component {
   render() {
@@ -17,6 +18,7 @@ class App extends Component {
         >
           Check User
         </button>
+        <SignUp />
       </div>
     );
   }
