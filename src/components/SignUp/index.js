@@ -30,6 +30,7 @@ class SignUp extends Component {
   render() {
     return (
       <main>
+        Sign Up
         <input
           label="E-Mail"
           config={{ type: "email" }}
