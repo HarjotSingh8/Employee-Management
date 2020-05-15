@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.js": "/Employee-Management/static/js/main.f4e05dd2.chunk.js",
-    "main.js.map": "/Employee-Management/static/js/main.f4e05dd2.chunk.js.map",
+    "main.js": "/Employee-Management/static/js/main.ea5e4fb2.chunk.js",
+    "main.js.map": "/Employee-Management/static/js/main.ea5e4fb2.chunk.js.map",
     "runtime-main.js": "/Employee-Management/static/js/runtime-main.0af4f584.js",
     "runtime-main.js.map": "/Employee-Management/static/js/runtime-main.0af4f584.js.map",
-    "static/js/2.fd539aba.chunk.js": "/Employee-Management/static/js/2.fd539aba.chunk.js",
-    "static/js/2.fd539aba.chunk.js.map": "/Employee-Management/static/js/2.fd539aba.chunk.js.map",
+    "static/js/2.73edd13f.chunk.js": "/Employee-Management/static/js/2.73edd13f.chunk.js",
+    "static/js/2.73edd13f.chunk.js.map": "/Employee-Management/static/js/2.73edd13f.chunk.js.map",
     "index.html": "/Employee-Management/index.html",
-    "precache-manifest.4b8acd7acc1ddb5f0c64c8761ef2b3bf.js": "/Employee-Management/precache-manifest.4b8acd7acc1ddb5f0c64c8761ef2b3bf.js",
+    "precache-manifest.4d1fa1d1b2b1e73520f0a34a58f74580.js": "/Employee-Management/precache-manifest.4d1fa1d1b2b1e73520f0a34a58f74580.js",
     "service-worker.js": "/Employee-Management/service-worker.js",
-    "static/js/2.fd539aba.chunk.js.LICENSE.txt": "/Employee-Management/static/js/2.fd539aba.chunk.js.LICENSE.txt"
+    "static/js/2.73edd13f.chunk.js.LICENSE.txt": "/Employee-Management/static/js/2.73edd13f.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.0af4f584.js",
-    "static/js/2.fd539aba.chunk.js",
-    "static/js/main.f4e05dd2.chunk.js"
+    "static/js/2.73edd13f.chunk.js",
+    "static/js/main.ea5e4fb2.chunk.js"
   ]
 }
