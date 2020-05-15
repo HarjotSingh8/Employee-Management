@@ -41,6 +41,20 @@ class StitchClass {
       });
     return user;
   };
+  confirmMail = async (token, tokenId) => {
+    const emailPassClient = Stitch.defaultAppClient.auth.getProviderClient(
+      UserPasswordAuthProviderClient.factory
+    );
+    let result = await emailPassClient
+      .confirmUser(token, tokenId)
+      .then(() => {
+        return true;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    return result;
+  };
 }
 
 //export default withUserContext(StitchClass);
