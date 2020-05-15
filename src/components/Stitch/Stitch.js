@@ -36,10 +36,24 @@ class StitchClass {
         return result;
       })
       .catch((err) => {
-        this.errorHandler("An error occurred!");
+        console.log("An error occurred!");
         console.log(err);
       });
     return user;
+  };
+  SignInEmailPassword = async (authData) => {
+    const credentials = new UserPasswordCredential(
+      authData.email,
+      authData.password
+    );
+    this.client.auth
+      .loginWithCredential(credentials)
+      .then((result) => {
+        console.log(result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
   confirmMail = async (token, tokenId) => {
     const emailPassClient = Stitch.defaultAppClient.auth.getProviderClient(
