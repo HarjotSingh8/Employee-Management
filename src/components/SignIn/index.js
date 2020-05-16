@@ -20,9 +20,10 @@ class SignUp extends Component {
       return;
     }
     let user = await this.props.stitch
-      .signInEmailPassword(authData)
+      .SignInEmailPassword(authData)
       .then((user) => {
         console.log(user);
+        console.log(this.props.stitch);
         return user;
       });
     console.log(user);

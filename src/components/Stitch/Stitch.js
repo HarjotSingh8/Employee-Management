@@ -27,10 +27,12 @@ class StitchClass {
     const emailPassClient = this.client.auth.getProviderClient(
       UserPasswordAuthProviderClient.factory
     );
+    console.log(emailPassClient);
     let user = await emailPassClient
       .registerWithEmail(authData.email, authData.password)
       .then((result) => {
         if (result) {
+          console.log("Sign Up Successful");
           console.log(result);
         }
         return result;
@@ -46,14 +48,17 @@ class StitchClass {
       authData.email,
       authData.password
     );
-    this.client.auth
+    let user = await this.client.auth
       .loginWithCredential(credentials)
       .then((result) => {
+        console.log("Sign In Successful");
         console.log(result);
+        return result;
       })
       .catch((err) => {
         console.log(err);
       });
+    return user;
   };
   confirmMail = async (token, tokenId) => {
     const emailPassClient = Stitch.defaultAppClient.auth.getProviderClient(
