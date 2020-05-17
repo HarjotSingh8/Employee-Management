@@ -3,15 +3,23 @@ import {
   AnonymousCredential,
   UserPasswordAuthProviderClient,
   UserPasswordCredential,
+  RemoteMongoClient,
+  BSON,
 } from "mongodb-stitch-browser-sdk";
-import { withUserContext } from "../UserContext";
+
 class StitchClass {
   constructor() {
     /*if (process.env.APP_ID) {
       this.appId = process.env.APP_ID;
     }*/
-    Stitch.initializeDefaultAppClient("employeemanagementstitch-xrbnw");
-    this.client = Stitch.defaultAppClient;
+    this.stitchApp = Stitch.initializeDefaultAppClient(
+      "employeemanagementstitch-xrbnw"
+    );
+    this.client = Stitch.defaultAppClient; //eh client mongodb stitch naal communicate karu
+    this.mongodb = this.stitchApp.getServiceClient(
+      RemoteMongoClient.factory,
+      "mongodb-atlas"
+    ); //eh database nu access karan vste aa
   }
   logInAnonymously = async () => {
     let user = await this.client.auth
@@ -23,12 +31,19 @@ class StitchClass {
       });
     return user;
   };
+
+  addUserData = async (args) => {
+    this.client.callFunction("AddNewUserData", [args]).then((result) => {
+      console.log(result);
+    });
+  };
+
   signUpEmailPassword = async (authData) => {
     const emailPassClient = this.client.auth.getProviderClient(
       UserPasswordAuthProviderClient.factory
     );
     console.log(emailPassClient);
-    let user = await emailPassClient
+    let err = await emailPassClient
       .registerWithEmail(authData.email, authData.password)
       .then((result) => {
         if (result) {
@@ -40,9 +55,11 @@ class StitchClass {
       .catch((err) => {
         console.log("An error occurred!");
         console.log(err);
+        return err;
       });
-    return user;
+    return err;
   };
+
   SignInEmailPassword = async (authData) => {
     const credentials = new UserPasswordCredential(
       authData.email,

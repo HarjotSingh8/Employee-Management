@@ -12,6 +12,7 @@ import SignIn from "./SignIn";
 import ConfirmEmail from "./ConfirmEmail";
 import ResetPassword from "./ResetPassword";
 import Navbar from "./Navbar";
+import FirstLoginData from "./FirstLoginData";
 
 class App extends Component {
   render() {
@@ -25,6 +26,9 @@ class App extends Component {
             </Route>
             <Route path="/SignIn">
               <SignIn />
+            </Route>
+            <Route path="/FirstLoginData">
+              <FirstLoginData />
             </Route>
             <Route path="/ConfirmMail" component={ConfirmEmail} />
             <Route path="/ResetPassword">
