@@ -10,24 +10,6 @@ class Home extends Component {
     return (
       <div>
         <div>this is home page </div>
-        <button
-          onClick={() => {
-            this.props.user.updateContext("Hello");
-          }}
-        >
-          update user
-        </button>
-        <button
-          onClick={async () => {
-            let user = await this.props.stitch.logInAnonymously();
-
-            console.log(user);
-            this.props.user.updateContext(user);
-            console.log(this.props);
-          }}
-        >
-          login anonymously
-        </button>
       </div>
     );
   }

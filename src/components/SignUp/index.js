@@ -44,15 +44,16 @@ class SignUp extends Component {
         console.log(user);
         return user;
       });
-    let login = await this.props.stitch.SignInEmailPassword({
+    /*let login = await this.props.stitch.SignInEmailPassword({
       email: this.state.email,
       password: this.state.passwordOne,
-    });
+    });*/
     console.log(user);
-    console.log(login);
-    console.log("before");
-    this.props.stitch.addUserData(this.state.username);
-    console.log("after");
+    //this.props.user.updateUser(user);
+    //console.log(login);
+    //console.log("before");
+    //this.props.stitch.addUserData(this.state.username);
+    //console.log("after");
   };
 
   onChange = (event) => {
@@ -60,7 +61,6 @@ class SignUp extends Component {
   };
   render() {
     const {
-      username,
       email,
       passwordOne,
       passwordTwo,
@@ -69,10 +69,7 @@ class SignUp extends Component {
     } = this.state;
 
     const isInvalid =
-      passwordOne !== passwordTwo ||
-      passwordOne === "" ||
-      email === "" ||
-      username === "";
+      passwordOne !== passwordTwo || passwordOne === "" || email === "";
 
     return (
       <form
@@ -86,14 +83,14 @@ class SignUp extends Component {
         </div>
         <div class="row justify-content-center bg-white">
           <div className="col-6">
-            <input
+            {/*<input
               name="username"
               class="col-12 my-2"
               value={username}
               onChange={this.onChange}
               type="text"
               placeholder="Full Name"
-            />
+            />*/}
             <input
               name="email"
               class="col-12 my-2"

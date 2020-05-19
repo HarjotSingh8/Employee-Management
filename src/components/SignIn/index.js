@@ -26,7 +26,14 @@ class SignUp extends Component {
         console.log(this.props.stitch);
         return user;
       });
+
+    this.props.stitch.client
+      .callFunction("CheckUserData", ["hello"])
+      .then((result) => {
+        console.log(result);
+      });
     console.log(user);
+    this.props.user.updateUser(user);
   };
   render() {
     return (

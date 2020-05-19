@@ -2,7 +2,7 @@ class User {
   constructor() {
     this.user = false;
   }
-  updateContext = (arg) => {
+  updateUser = (arg) => {
     this.user = arg;
   };
 }
