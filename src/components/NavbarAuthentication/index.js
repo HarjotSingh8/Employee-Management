@@ -1,11 +1,13 @@
 import React, { Component } from "react";
 import Navbar from "../Navbar";
-import { withUserContext } from "../UserContext";
+import { withUserContext, UserContext } from "../UserContext";
 import NavNonAuth from "./NavNonAuth";
 import NavAuth from "./NavAuth";
 import { withStitch } from "../Stitch";
+
 class NavbarAuthentication extends Component {
-  state = { user: null };
+  state = { user: {} };
+  //state = { user: null };
   /*componentDidUpdate(prevProps) {
     console.log("prev props");
     console.log(prevProps);
@@ -16,6 +18,16 @@ class NavbarAuthentication extends Component {
       this.setState({ user: this.props.stitch.client });
     }
   }*/
+  componentDidUpdate() {
+    console.log(this.state.user);
+    console.log("navbar updated");
+    if (this.props.user != this.state.user) {
+      console.log("updating navbar");
+      console.log(this.props.user);
+      this.setState({ user: this.props.user });
+    }
+  }
+
   render() {
     // if (this.state.user != this.props.stitch.client) {
     //   this.setState({ user: this.props.stitch.client });
@@ -24,12 +36,21 @@ class NavbarAuthentication extends Component {
     //if (this.state.user == null || this.state.user == false) {
     if (this.props.stitch.client.auth.activeUserAuthInfo.userId) {
       return (
-        <NavAuth
-          email={
-            this.props.stitch.client.auth.activeUserAuthInfo.userProfile.data
-              .email
-          }
-        />
+        <div>
+          <NavAuth
+            email={
+              this.props.stitch.client.auth.activeUserAuthInfo.userProfile.data
+                .email
+            }
+          />
+          <button
+            onClick={() => {
+              console.log(this.props.user.test);
+            }}
+          >
+            {this.state.user.test}
+          </button>
+        </div>
       );
     } else {
       return <NavNonAuth />;
@@ -37,4 +58,4 @@ class NavbarAuthentication extends Component {
   }
 }
 
-export default withStitch(NavbarAuthentication);
+export default withStitch(withUserContext(NavbarAuthentication));

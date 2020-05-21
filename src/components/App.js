@@ -17,8 +17,8 @@ import ResetPassword from "./ResetPassword";
 import Navbar from "./Navbar";
 import FirstLoginData from "./FirstLoginData";
 import CommuncationsPage from "./Communications";
-
 class App extends Component {
+  state = { temp: 0 };
   updateUserData = async () => {
     console.log(this.props.stitch);
     if (this.props.stitch.client.auth.currentUser) {
@@ -26,18 +26,32 @@ class App extends Component {
       let res = await this.props.stitch.client.auth.refreshCustomData();
       console.log(this.props.stitch.client.auth.currentUser);
       this.props.user.updateUser(this.props.stitch.client.auth.currentUser);
+      console.log(this.props.user);
     } else {
       console.log("user not logged in");
     }
   };
   componentDidMount() {
-    //this.props.stitch.client;
     this.updateUserData();
+    this.props.user.setUpdater(this.updated);
   }
+  updated = () => {
+    console.log("changing app.js state");
+    //console.log(this.props.user);
+    this.setState({ temp: this.state.temp + 1 });
+  };
+
   render() {
     return (
       <Router basename="/">
         <div>
+          <button
+            onClick={() => {
+              this.setState({ temp: !this.state.temp });
+            }}
+          >
+            toggle state
+          </button>
           <Navbar />
           <button
             onClick={async () => {
@@ -47,6 +61,7 @@ class App extends Component {
           >
             console.log userdata in app.js
           </button>
+
           <Switch>
             <Route path="/SignUp">
               <SignUp />

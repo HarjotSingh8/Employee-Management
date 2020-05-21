@@ -40,6 +40,13 @@ class SignUp extends Component {
       <main className="d-flex m-5 justify-content-center">
         <div className="row col-sm-12 col-md-9 justify-content-center bg-light shadow p-5">
           <div className="col-12 text-center display-4">Sign In</div>
+          <button
+            onClick={() => {
+              this.props.user.updateTest("hello");
+            }}
+          >
+            {this.props.user.test}
+          </button>
           <input
             className="col-12 m-1 form-control shadow"
             label="E-Mail"
