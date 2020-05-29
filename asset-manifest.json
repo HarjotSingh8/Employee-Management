@@ -1,22 +1,26 @@
 {
   "files": {
-    "main.js": "/Employee-Management/static/js/main.dec38cd7.chunk.js",
-    "main.js.map": "/Employee-Management/static/js/main.dec38cd7.chunk.js.map",
+    "main.css": "/Employee-Management/static/css/main.4795c920.chunk.css",
+    "main.js": "/Employee-Management/static/js/main.b75b6f9a.chunk.js",
+    "main.js.map": "/Employee-Management/static/js/main.b75b6f9a.chunk.js.map",
     "runtime-main.js": "/Employee-Management/static/js/runtime-main.0af4f584.js",
     "runtime-main.js.map": "/Employee-Management/static/js/runtime-main.0af4f584.js.map",
     "static/css/2.af3c1da9.chunk.css": "/Employee-Management/static/css/2.af3c1da9.chunk.css",
-    "static/js/2.542127e6.chunk.js": "/Employee-Management/static/js/2.542127e6.chunk.js",
-    "static/js/2.542127e6.chunk.js.map": "/Employee-Management/static/js/2.542127e6.chunk.js.map",
+    "static/js/2.9714d924.chunk.js": "/Employee-Management/static/js/2.9714d924.chunk.js",
+    "static/js/2.9714d924.chunk.js.map": "/Employee-Management/static/js/2.9714d924.chunk.js.map",
     "index.html": "/Employee-Management/index.html",
-    "precache-manifest.e606ab1f020aff4d947b9ce6e4f7e24e.js": "/Employee-Management/precache-manifest.e606ab1f020aff4d947b9ce6e4f7e24e.js",
+    "precache-manifest.f13ebfdda65f5aec8e1f4b4939dfcbd6.js": "/Employee-Management/precache-manifest.f13ebfdda65f5aec8e1f4b4939dfcbd6.js",
     "service-worker.js": "/Employee-Management/service-worker.js",
     "static/css/2.af3c1da9.chunk.css.map": "/Employee-Management/static/css/2.af3c1da9.chunk.css.map",
-    "static/js/2.542127e6.chunk.js.LICENSE.txt": "/Employee-Management/static/js/2.542127e6.chunk.js.LICENSE.txt"
+    "static/css/main.4795c920.chunk.css.map": "/Employee-Management/static/css/main.4795c920.chunk.css.map",
+    "static/js/2.9714d924.chunk.js.LICENSE.txt": "/Employee-Management/static/js/2.9714d924.chunk.js.LICENSE.txt",
+    "static/media/ElCapitan.jpg": "/Employee-Management/static/media/ElCapitan.5a845c11.jpg"
   },
   "entrypoints": [
     "static/js/runtime-main.0af4f584.js",
     "static/css/2.af3c1da9.chunk.css",
-    "static/js/2.542127e6.chunk.js",
-    "static/js/main.dec38cd7.chunk.js"
+    "static/js/2.9714d924.chunk.js",
+    "static/css/main.4795c920.chunk.css",
+    "static/js/main.b75b6f9a.chunk.js"
   ]
 }
