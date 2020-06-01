@@ -1,27 +1,23 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "bb0967bde4106401a26432ad1f2db967",
+    "revision": "70a51333c0f336182cf9b810ffdaa7a6",
     "url": "/Employee-Management/index.html"
   },
   {
-    "revision": "a7be000819edf2a6c468",
+    "revision": "121c25e3b6884581487b",
     "url": "/Employee-Management/static/css/2.af3c1da9.chunk.css"
   },
   {
-    "revision": "a7d95183ff416832afec",
-    "url": "/Employee-Management/static/css/main.4795c920.chunk.css"
-  },
-  {
-    "revision": "a7be000819edf2a6c468",
-    "url": "/Employee-Management/static/js/2.9714d924.chunk.js"
+    "revision": "121c25e3b6884581487b",
+    "url": "/Employee-Management/static/js/2.34a463fc.chunk.js"
   },
   {
     "revision": "73e2171baad1ebcb82d7f9ae2f175241",
-    "url": "/Employee-Management/static/js/2.9714d924.chunk.js.LICENSE.txt"
+    "url": "/Employee-Management/static/js/2.34a463fc.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "a7d95183ff416832afec",
-    "url": "/Employee-Management/static/js/main.b75b6f9a.chunk.js"
+    "revision": "b7e358603fd65b32cc5d",
+    "url": "/Employee-Management/static/js/main.d137a137.chunk.js"
   },
   {
     "revision": "d07c02ed5b5f28443479",
