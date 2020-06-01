@@ -15,9 +15,23 @@ class ConfirmEmail extends Component {
   }
   render() {
     if (this.state.confirmed) {
-      return <div>Thank You For Confirming Your Email</div>;
+      return (
+        <main className="d-flex m-5 justify-content-center">
+          <div className="row col-sm-12 col-md-9 justify-content-center bg-light shadow p-5">
+            <div className="col-12 text-center display-4">
+              Thank You For Confirming Your Email
+            </div>
+          </div>
+        </main>
+      );
     } else {
-      return <div>confirming ...</div>;
+      return (
+        <main className="d-flex m-5 justify-content-center">
+          <div className="row col-sm-12 col-md-9 justify-content-center bg-light shadow p-5">
+            <div className="col-12 text-center display-4">confirming ...</div>
+          </div>
+        </main>
+      );
     }
   }
 }

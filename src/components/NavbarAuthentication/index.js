@@ -38,18 +38,8 @@ class NavbarAuthentication extends Component {
       return (
         <div>
           <NavAuth
-            email={
-              this.props.stitch.client.auth.activeUserAuthInfo.userProfile.data
-                .email
-            }
+            name={this.props.stitch.client.auth.currentUser.customData.name}
           />
-          <button
-            onClick={() => {
-              console.log(this.props.user.test);
-            }}
-          >
-            {this.state.user.test}
-          </button>
         </div>
       );
     } else {
@@ -58,4 +48,4 @@ class NavbarAuthentication extends Component {
   }
 }
 
-export default withStitch(withUserContext(NavbarAuthentication));
+export default withStitch(NavbarAuthentication);

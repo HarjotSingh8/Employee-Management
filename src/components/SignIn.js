@@ -4,9 +4,10 @@ import {
   UserPasswordAuthProviderClient,
   UserPasswordCredential,
 } from "mongodb-stitch-browser-sdk";
+import { withRouter } from "react-router-dom";
 
-import { withUserContext } from "../UserContext";
-import { withStitch } from "../Stitch";
+import { withUserContext } from "./UserContext";
+import { withStitch } from "./Stitch";
 
 class SignUp extends Component {
   state = { email: "", password: "" };
@@ -24,29 +25,30 @@ class SignUp extends Component {
       .then((user) => {
         console.log(user);
         console.log(this.props.stitch);
+        if (user.customData.userInitialised == true) {
+          this.props.history.push("/Profile");
+        } else {
+          this.props.history.push("/FirstLoginData");
+        }
         return user;
       });
 
-    this.props.stitch.client
+    /*this.props.stitch.client
       .callFunction("CheckUserData", ["hello"])
       .then((result) => {
         console.log(result);
-      });
-    console.log(user);
-    this.props.user.updateUser(user);
+      });*/
+    console.log(this.props.stitch);
   };
+  componentDidUpdate() {
+    console.log(this.props.stitch);
+  }
   render() {
     return (
       <main className="d-flex m-5 justify-content-center">
         <div className="row col-sm-12 col-md-9 justify-content-center bg-light shadow p-5">
           <div className="col-12 text-center display-4">Sign In</div>
-          <button
-            onClick={() => {
-              this.props.user.updateTest("hello");
-            }}
-          >
-            {this.props.user.test}
-          </button>
+
           <input
             className="col-12 m-1 form-control shadow"
             label="E-Mail"
@@ -56,6 +58,7 @@ class SignUp extends Component {
           <input
             className="col-12 mt-1 form-control shadow"
             label="Password"
+            type="password"
             config={{ type: "password" }}
             onChange={(event) => this.inputChangeHandler(event, "password")}
           />
@@ -71,4 +74,4 @@ class SignUp extends Component {
   }
 }
 
-export default withStitch(withUserContext(SignUp));
+export default withRouter(withStitch(SignUp));

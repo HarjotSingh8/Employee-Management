@@ -20,7 +20,12 @@ class StitchClass {
       RemoteMongoClient.factory,
       "mongodb-atlas"
     ); //eh database nu access karan vste aa
+    //this.logInAnonymously();
+    this.updateAppjs = null;
   }
+  setUpdateAppjs = (arg) => {
+    this.updateAppjs = arg;
+  };
   logInAnonymously = async () => {
     let user = await this.client.auth
       .loginWithCredential(new AnonymousCredential())
@@ -50,6 +55,16 @@ class StitchClass {
           console.log("Sign Up Successful");
           console.log(result);
         }
+        console.log(result);
+        this.client.auth
+          .loginWithCredential(new AnonymousCredential())
+          .then((user) =>
+            this.client.callFunction("AddNewUserToBuffer", [
+              authData.name,
+              authData.email,
+              authData.AccountType,
+            ])
+          );
         return result;
       })
       .catch((err) => {
@@ -70,6 +85,7 @@ class StitchClass {
       .then((result) => {
         console.log("Sign In Successful");
         console.log(result);
+        this.updateAppjs(result);
         return result;
       })
       .catch((err) => {
