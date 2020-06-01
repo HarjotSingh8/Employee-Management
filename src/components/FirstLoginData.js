@@ -73,10 +73,10 @@ class FirstLoginData extends Component {
       .then((result) => {
         const userData = result.doc;
         console.log("user data" + userData);
-        this.props.history.push("/Profile");
         if (userData.reqFields == true) {
           console.log("successfull");
         }
+        this.props.history.push("/Profile");
       });
   };
   inputChangeHandler = (event, input) => {

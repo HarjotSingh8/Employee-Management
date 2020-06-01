@@ -8,9 +8,24 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { withStitch } from "../Stitch";
 class UserProfile extends Component {
-  state = { selectedTab: "Overview", editDescription: false };
+  state = {
+    selectedTab: "Overview",
+    editDescription: false,
+    searchUser: "",
+    searchEmployer: "",
+    otherUsers: null,
+  };
+  check = (a, b) => {
+    a = a.toLowerCase();
+    console.log(a);
+    b = b.toLowerCase();
+    console.log(b);
+    if (b.includes(a)) return true;
+    else return false;
+  };
   Description = () => {
     if (this.props.user.Description) {
+      return <div className="col-12">{this.props.user.Description}</div>;
     } else if (this.state.editDescription) {
       return (
         <div>
@@ -37,9 +52,56 @@ class UserProfile extends Component {
       );
     }
   };
+  showSearchedEmployees = () => {
+    if (this.state.searchEmployer != "" && this.state.Organisations == null) {
+      this.fetchUsers();
+    }
+    if (this.state.Organisations && this.state.searchEmployer != "") {
+      return (
+        <div className="col-12 ml-0 p-0">
+          {Object.keys(this.state.Organisations).map((orgKey) => {
+            if (
+              this.check(
+                this.state.searchEmployer,
+                this.state.Organisations[orgKey].name
+              )
+            )
+              return (
+                <Link className="col-12 ml-0 btn btn-light border" key={orgKey}>
+                  {this.state.Organisations[orgKey].name}
+                </Link>
+              );
+          })}
+        </div>
+      );
+    } else return <div></div>;
+  };
+  Employer = () => {
+    if (this.props.user.Employer && this.props.user.Employer != "") {
+      return <div className="col-12">{this.props.user.Employer}</div>;
+    } else {
+      return (
+        <div className="col-12 p-0">
+          <input
+            className="col-12 form-control shadow"
+            label="Employer"
+            config={{ type: "Employer" }}
+            placeholder="Search your Employer"
+            style={{ height: "24px" }}
+            onChange={(event) =>
+              this.setState({ searchEmployer: event.target.value })
+            }
+          />
+          {this.showSearchedEmployees()}
+        </div>
+      );
+    }
+  };
   Overview = () => {
     return (
       <div className="col-12 row">
+        <div className="col-3 font-weight-bold pr-2">Employer:</div>
+        <div className="col-9">{this.Employer()}</div>
         <div className="col-3 font-weight-bold pr-2">About:</div>
         <div className="col-9">{this.Description()}</div>
         <div className="col-3 font-weight-bold pr-2">Email:</div>
@@ -71,6 +133,57 @@ class UserProfile extends Component {
         </div>
       </div>
     );
+  };
+  showFriends = () => {
+    return (
+      <div className="col-12">
+        {Object.keys(this.props.user.friends).map((friendKey) => (
+          <div className="col-12">{this.props.user.friends[friendKey]}</div>
+        ))}
+      </div>
+    );
+  };
+  fetchUsers = () => {
+    if (this.state.Users == null)
+      this.props.stitch.client
+        .callFunction("fetchUsersforSearch", [])
+        .then((response) => {
+          console.log(response);
+          this.setState({
+            Users: response.Users,
+            Organisations: response.Organisations,
+          });
+        });
+  };
+  SearchedFriends = () => {
+    if (this.state.otherUsers == null) {
+      this.fetchUsers();
+    }
+    if (this.state.searchUser != "" && this.state.otherUsers != null)
+      return <div>Results here</div>;
+    else
+      return <div className="col-12 text-muted">Search to find more users</div>;
+  };
+  SearchFriendsBar = () => {
+    return (
+      <div>
+        <input
+          className="col-12 form-control shadow"
+          label="Friends"
+          config={{ type: "Friends" }}
+          placeholder="Search a Friend"
+          onChange={(event) =>
+            this.setState({ searchUser: event.target.value })
+          }
+        />
+        {this.SearchedFriends()}
+        <div className="col-12"></div>
+        {this.showFriends()}
+      </div>
+    );
+  };
+  Friends = () => {
+    return <div className="col-12">{this.SearchFriendsBar()}</div>;
   };
   showTeams = () => {
     console.log(this.props.user);
@@ -132,7 +245,7 @@ class UserProfile extends Component {
   };
   panelSwitcher = () => {
     if (this.state.selectedTab == "Overview") return this.Overview();
-    if (this.state.selectedTab == "Friends") return this.Settings();
+    if (this.state.selectedTab == "Friends") return this.Friends();
     if (this.state.selectedTab == "Teams") return this.Teams();
     if (this.state.selectedTab == "Settings") return this.Settings();
   };
