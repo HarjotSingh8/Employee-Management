@@ -296,7 +296,44 @@ class UserProfile extends Component {
     );
   };
   Settings = () => {
-    return <div>Settings</div>;
+    return (
+      <div className="col-12 row">
+        <div className="col-12 row mb-3">
+          <div className="col-3 font-weight-bold">Change Password</div>
+          <div className="col-9">
+            <input
+              className="form-control"
+              type="text"
+              placeholder="Current Password"
+            ></input>
+            <input
+              className="form-control"
+              type="text"
+              placeholder="New Password"
+            ></input>
+            <input
+              className="form-control"
+              type="text"
+              placeholder="New Password"
+            ></input>
+            <button className="btn btn-dark">save</button>
+          </div>
+        </div>
+        <div className="col-12 row mb-3">
+          <div className="col-3 font-weight-bold">Delete Account</div>
+          <div className="col-9">
+            <input
+              className="form-control text-danger"
+              type="text"
+              placeholder="Type you email here"
+            ></input>
+            I understand i will not be able to recover this account once this
+            action completes
+            <button className="btn btn-danger">Delete</button>
+          </div>
+        </div>
+      </div>
+    );
   };
   panelSwitcher = () => {
     if (this.state.selectedTab == "Overview") return this.Overview();

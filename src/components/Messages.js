@@ -28,7 +28,11 @@ class Messages extends Component {
       this.watcher();
       this.setState({ watcherInitialised: true });
     }
+    this.scrollToBottom();
   }
+  scrollToBottom = () => {
+    this.messagesEnd.scrollIntoView({ behavior: "smooth" });
+  };
   getMessages() {
     console.log(this.props.stitch.client.auth.currentUser.id);
     const MessagesCollection = this.props.stitch.mongodb
@@ -87,6 +91,7 @@ class Messages extends Component {
       }
       return result;
     });
+    this.setState({ message: "" });
   };
   watcher = async () => {
     // Create a change stream that watches the collection
@@ -109,8 +114,11 @@ class Messages extends Component {
       console.log("hello there");
       console.log(event.fullDocument);
       var messages = this.state.messages;
-      messages[event.fullDocument._id] = event.fullDocument;
+      messages[
+        event.fullDocument[this.props.stitch.client.auth.currentUser.id].uid
+      ] = event.fullDocument;
       this.setState({ messages: messages });
+      this.scrollToBottom();
     });
     console.log("hello");
     // Insert a document with status set to 'blocked'
@@ -181,9 +189,54 @@ class Messages extends Component {
           </div>
           <div
             id="mainAreaRight"
-            className="flex-row  m-0 px-2 flex-grow-1 flex-row border-left border-secondary"
+            className="flex-column m-0 px-2 flex-grow-1 overflow-auto border-left border-secondary"
           >
-            <div className="d-flex rounded bg-dark px-1">
+            <div className="flex-row px-1 overflow-auto mb-5">
+              {this.state.activeUser ? (
+                Object.keys(
+                  this.state.messages[this.state.activeUser.uid].messages
+                ).map((message) =>
+                  this.state.messages[this.state.activeUser.uid].messages[
+                    message
+                  ].uid == this.props.stitch.client.auth.currentUser.id ? (
+                    <div className="d-flex col-12 mt-1 justify-content-end">
+                      <div className="btn btn-primary disabled">
+                        {
+                          this.state.messages[this.state.activeUser.uid]
+                            .messages[message].message
+                        }
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="d-flex col-12 mt-1 justify-content-start">
+                      <div className="btn btn-secondary disabled">
+                        {
+                          this.state.messages[this.state.activeUser.uid]
+                            .messages[message].message
+                        }
+                      </div>
+                    </div>
+                  )
+                )
+              ) : (
+                <div></div>
+              )}
+              <div
+                ref={(el) => {
+                  this.messagesEnd = el;
+                }}
+              >
+                {""}
+              </div>
+            </div>
+            <div
+              className="d-flex col-6 rounded border border-secondary bg-dark px-1"
+              style={{
+                position: "absolute",
+                bottom: "0",
+                right: "10px",
+              }}
+            >
               <input
                 value={this.state.message}
                 className="flex-grow-1 text-light form-control rounded-0 border-left-0 border-bottom-0 border-top-0 border-secondary bg-dark"
@@ -203,37 +256,6 @@ class Messages extends Component {
               >
                 send
               </button>
-            </div>
-            <div className="row px-1">
-              {this.state.activeUser ? (
-                Object.keys(
-                  this.state.messages[this.state.activeUser.uid].messages
-                ).map((message) =>
-                  this.state.messages[this.state.activeUser.uid].messages[
-                    message
-                  ].uid == this.props.stitch.client.auth.currentUser.id ? (
-                    <div className="d-flex col-12 mt-1 justify-content-start">
-                      <div className="btn btn-primary disabled">
-                        {
-                          this.state.messages[this.state.activeUser.uid]
-                            .messages[message].message
-                        }
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="d-flex col-12 mt-1 justify-content-end">
-                      <div className="btn btn-secondary disabled">
-                        {
-                          this.state.messages[this.state.activeUser.uid]
-                            .messages[message].message
-                        }
-                      </div>
-                    </div>
-                  )
-                )
-              ) : (
-                <div></div>
-              )}
             </div>
           </div>
         </div>
