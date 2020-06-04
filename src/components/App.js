@@ -17,6 +17,7 @@ import ResetPassword from "./ResetPassword";
 import Navbar from "./Navbar";
 import FirstLoginData from "./FirstLoginData";
 import CommuncationsPage from "./Communications";
+import Messages from "./Messages";
 
 //
 import InputFields from "./InputFields";
@@ -57,44 +58,46 @@ class App extends Component {
   render() {
     return (
       <Router basename="/">
-        <div style={{ minHeight: "100vh" }}>
-          <img
-            src={bg}
-            style={{
-              height: "100vh",
-              width: "100%",
-              zIndex: -2,
-              position: "fixed",
-              objectFit: "cover",
-            }}
-          ></img>
-          <Navbar />
-          <Switch>
-            <Route path="/SignUp">
-              <SignUp />
-            </Route>
-            <Route path="/SignIn">
-              <SignIn />
-            </Route>
-            <Route path="/FirstLoginData">
-              <FirstLoginData />
-            </Route>
-            <Route path="/InputFields">
-              <InputFields />
-            </Route>
-            <Route path="/Profile">
-              <Profile user={this.state.user} />
-            </Route>
-            <Route path="/ConfirmMail" component={ConfirmEmail} />
-            <Route path="/ResetPassword">
-              <ResetPassword />
-            </Route>
-            <Route path="/">
-              <SignUp />
-              <Home />
-            </Route>
-          </Switch>
-        </div>
+        <img
+          src={bg}
+          style={{
+            height: "100vh",
+            width: "100%",
+            zIndex: -2,
+            position: "fixed",
+            objectFit: "cover",
+          }}
+        ></img>
+        <Navbar />
+
+        <Switch>
+          <Route path="/SignUp">
+            <SignUp />
+          </Route>
+          <Route path="/SignIn">
+            <SignIn />
+          </Route>
+          <Route path="/FirstLoginData">
+            <FirstLoginData />
+          </Route>
+          <Route path="/InputFields">
+            <InputFields />
+          </Route>
+          <Route path="/Profile">
+            <Profile user={this.state.user} />
+          </Route>
+          <Route path="/ConfirmMail" component={ConfirmEmail} />
+          <Route path="/ResetPassword">
+            <ResetPassword />
+          </Route>
+          <Route path="/messages">
+            <Messages />
+          </Route>
+          <Route path="/">
+            <SignUp />
+            <Home />
+          </Route>
+        </Switch>
       </Router>
     );
   }

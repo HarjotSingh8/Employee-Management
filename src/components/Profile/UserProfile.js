@@ -99,7 +99,7 @@ class UserProfile extends Component {
   };
   Overview = () => {
     return (
-      <div className="col-12 row">
+      <div className="col-12 row overflow-auto">
         <div className="col-3 font-weight-bold pr-2">Employer:</div>
         <div className="col-9">{this.Employer()}</div>
         <div className="col-3 font-weight-bold pr-2">About:</div>
@@ -135,13 +135,16 @@ class UserProfile extends Component {
     );
   };
   showFriends = () => {
-    return (
-      <div className="col-12">
-        {Object.keys(this.props.user.friends).map((friendKey) => (
-          <div className="col-12">{this.props.user.friends[friendKey]}</div>
-        ))}
-      </div>
-    );
+    if (this.props.user.friends)
+      return (
+        <div className="col-12">
+          {this.props.user.friends.map((friend, id) => (
+            <Link to={"/messages/" + friend.uid} className="btn btn-dark mr-1">
+              {friend.name}
+            </Link>
+          ))}
+        </div>
+      );
   };
   fetchUsers = () => {
     if (this.state.Users == null)
@@ -155,12 +158,64 @@ class UserProfile extends Component {
           });
         });
   };
+  addFriend = (id, name) => {
+    this.props.stitch.client
+      .callFunction("addFriend", [{ id: id, name: name }])
+      .then(this.props.user.friends.push({ uid: id, name: name }));
+  };
   SearchedFriends = () => {
     if (this.state.otherUsers == null) {
       this.fetchUsers();
     }
-    if (this.state.searchUser != "" && this.state.otherUsers != null)
-      return <div>Results here</div>;
+    if (this.state.searchUser != "" && this.state.Users != null)
+      return (
+        <div className="col-12">
+          {Object.keys(this.state.Users).map((userId) => {
+            if (
+              this.check(this.state.searchUser, this.state.Users[userId].name)
+            )
+              return (
+                <div className="col-12 px-0 btn-group">
+                  <Link
+                    to="/Profile/h"
+                    className="col-8 px-0 shadow btn btn-light"
+                  >
+                    {this.state.Users[userId].name}
+                  </Link>
+                  {this.props.user.friends[this.state.Users[userId].userId] ? (
+                    <>
+                      {this.props.user.friends[this.state.Users[userId].userId]
+                        .confirmed ? (
+                        <Link
+                          className="col-4 flex-shrink-1 btn btn-dark"
+                          to={"message/" + this.props.userId}
+                        >
+                          Message
+                        </Link>
+                      ) : (
+                        <button className="col-4 flex-shrink-1 btn btn-dark disabled">
+                          Requested
+                        </button>
+                      )}
+                    </>
+                  ) : (
+                    <button
+                      className="col-4 flex-shrink-1 btn btn-dark"
+                      onClick={() => {
+                        this.addFriend(
+                          this.state.Users[userId].userId,
+                          this.state.Users[userId].name
+                        );
+                      }}
+                    >
+                      Add Friend
+                    </button>
+                  )}
+                </div>
+              );
+          })}
+        </div>
+      );
     else
       return <div className="col-12 text-muted">Search to find more users</div>;
   };
@@ -261,56 +316,58 @@ class UserProfile extends Component {
   };
   render() {
     return (
-      <main className="d-flex mt-md-5 justify-content-center">
-        <div className="row col-sm-12 col-md-10 col-lg-8 justify-content-center bg-light shadow px-0">
-          <div className="col-12 text-center border-bottom display-4 py-5">
-            {this.props.user.name}
+      <div className="overflow-auto flex-grow-1">
+        <main className="d-flex mt-md-5 justify-content-center">
+          <div className="row col-sm-12 col-md-10 col-lg-8 justify-content-center bg-light shadow px-0">
+            <div className="col-12 text-center border-bottom display-4 py-5">
+              {this.props.user.name}
+            </div>
+            <div className="col-4 border-right pb-5">
+              <button
+                className={
+                  this.state.selectedTab == "Overview"
+                    ? "col-12 btn btn btn-light text-primary"
+                    : "col-12 btn btn-light text-secondary"
+                }
+                onClick={() => this.setState({ selectedTab: "Overview" })}
+              >
+                Overview
+              </button>
+              <button
+                className={
+                  this.state.selectedTab == "Friends"
+                    ? "col-12 btn btn btn-light text-primary"
+                    : "col-12 btn btn-light text-secondary"
+                }
+                onClick={() => this.setState({ selectedTab: "Friends" })}
+              >
+                Friends
+              </button>
+              <button
+                className={
+                  this.state.selectedTab == "Teams"
+                    ? "col-12 btn btn btn-light text-primary"
+                    : "col-12 btn btn-light text-secondary"
+                }
+                onClick={() => this.setState({ selectedTab: "Teams" })}
+              >
+                Teams
+              </button>
+              <button
+                className={
+                  this.state.selectedTab == "Settings"
+                    ? "col-12 btn btn btn-light text-primary"
+                    : "col-12 btn btn-light text-secondary"
+                }
+                onClick={() => this.setState({ selectedTab: "Settings" })}
+              >
+                Settings
+              </button>
+            </div>
+            <div className="col-8">{this.mainPanel()}</div>
           </div>
-          <div className="col-4 border-right pb-5">
-            <button
-              className={
-                this.state.selectedTab == "Overview"
-                  ? "col-12 btn btn btn-light text-primary"
-                  : "col-12 btn btn-light text-secondary"
-              }
-              onClick={() => this.setState({ selectedTab: "Overview" })}
-            >
-              Overview
-            </button>
-            <button
-              className={
-                this.state.selectedTab == "Friends"
-                  ? "col-12 btn btn btn-light text-primary"
-                  : "col-12 btn btn-light text-secondary"
-              }
-              onClick={() => this.setState({ selectedTab: "Friends" })}
-            >
-              Friends
-            </button>
-            <button
-              className={
-                this.state.selectedTab == "Teams"
-                  ? "col-12 btn btn btn-light text-primary"
-                  : "col-12 btn btn-light text-secondary"
-              }
-              onClick={() => this.setState({ selectedTab: "Teams" })}
-            >
-              Teams
-            </button>
-            <button
-              className={
-                this.state.selectedTab == "Settings"
-                  ? "col-12 btn btn btn-light text-primary"
-                  : "col-12 btn btn-light text-secondary"
-              }
-              onClick={() => this.setState({ selectedTab: "Settings" })}
-            >
-              Settings
-            </button>
-          </div>
-          <div className="col-8">{this.mainPanel()}</div>
-        </div>
-      </main>
+        </main>
+      </div>
     );
   }
 }
