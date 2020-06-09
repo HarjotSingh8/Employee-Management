@@ -10,6 +10,7 @@ class Messages extends Component {
     watcherInitialised: null,
     activeUser: null,
     message: "",
+    showScrumBoard: false,
   };
   componentDidMount() {
     /*this.props.stitch.client
@@ -28,7 +29,7 @@ class Messages extends Component {
       this.watcher();
       this.setState({ watcherInitialised: true });
     }
-    this.scrollToBottom();
+    //this.scrollToBottom();
   }
   scrollToBottom = () => {
     this.messagesEnd.scrollIntoView({ behavior: "smooth" });
@@ -161,7 +162,7 @@ class Messages extends Component {
           <div
             id="mainAreaLeft"
             className="flex-row  m-0 px-2 bg-dark overflow-auto"
-            style={{ width: "300px" }}
+            style={{ minWidth: "300px", maxWidth: "300px" }}
           >
             {this.state.messages ? (
               Object.keys(this.state.messages).map((chatId) => (
@@ -200,20 +201,24 @@ class Messages extends Component {
                     message
                   ].uid == this.props.stitch.client.auth.currentUser.id ? (
                     <div className="d-flex col-12 mt-1 justify-content-end">
-                      <div className="btn btn-primary disabled">
-                        {
-                          this.state.messages[this.state.activeUser.uid]
-                            .messages[message].message
-                        }
+                      <div className="d-flex col-9 p-0 justify-content-end">
+                        <div className="btn btn-primary disabled">
+                          {
+                            this.state.messages[this.state.activeUser.uid]
+                              .messages[message].message
+                          }
+                        </div>
                       </div>
                     </div>
                   ) : (
                     <div className="d-flex col-12 mt-1 justify-content-start">
-                      <div className="btn btn-secondary disabled">
-                        {
-                          this.state.messages[this.state.activeUser.uid]
-                            .messages[message].message
-                        }
+                      <div className="d-flex col-9 p-0 justify-content-start">
+                        <div className="btn btn-secondary disabled">
+                          {
+                            this.state.messages[this.state.activeUser.uid]
+                              .messages[message].message
+                          }
+                        </div>
                       </div>
                     </div>
                   )

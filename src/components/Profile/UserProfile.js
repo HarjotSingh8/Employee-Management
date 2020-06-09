@@ -9,13 +9,23 @@ import { Link } from "react-router-dom";
 import { withStitch } from "../Stitch";
 class UserProfile extends Component {
   state = {
+    user: null,
     selectedTab: "Overview",
     editDescription: false,
     searchUser: "",
     searchEmployer: "",
     otherUsers: null,
   };
-  check = (a, b) => {
+  componentDidMount() {
+    if (this.state.user != this.props.user)
+      this.setState({ user: this.props.user });
+  }
+  componentDidUpdate() {
+    if (this.state.user != this.props.user) {
+      this.setState({ user: this.props.user });
+    }
+  }
+  checkForSearch = (a, b) => {
     a = a.toLowerCase();
     console.log(a);
     b = b.toLowerCase();
@@ -24,8 +34,8 @@ class UserProfile extends Component {
     else return false;
   };
   Description = () => {
-    if (this.props.user.Description) {
-      return <div className="col-12">{this.props.user.Description}</div>;
+    if (this.state.user.Description) {
+      return <div className="col-12">{this.state.user.Description}</div>;
     } else if (this.state.editDescription) {
       return (
         <div>
@@ -61,7 +71,7 @@ class UserProfile extends Component {
         <div className="col-12 ml-0 p-0">
           {Object.keys(this.state.Organisations).map((orgKey) => {
             if (
-              this.check(
+              this.checkForSearch(
                 this.state.searchEmployer,
                 this.state.Organisations[orgKey].name
               )
@@ -77,8 +87,8 @@ class UserProfile extends Component {
     } else return <div></div>;
   };
   Employer = () => {
-    if (this.props.user.Employer && this.props.user.Employer != "") {
-      return <div className="col-12">{this.props.user.Employer}</div>;
+    if (this.state.user.Employer && this.state.user.Employer != "") {
+      return <div className="col-12">{this.state.user.Employer}</div>;
     } else {
       return (
         <div className="col-12 p-0">
@@ -106,8 +116,8 @@ class UserProfile extends Component {
         <div className="col-9">{this.Description()}</div>
         <div className="col-3 font-weight-bold pr-2">Email:</div>
         <div className="col-9">
-          <a href={this.props.user.email} className="col-12 pl-0">
-            {this.props.user.email}
+          <a href={this.state.user.email} className="col-12 pl-0">
+            {this.state.user.email}
           </a>
           <button
             className="btn btn-secondary py-0 disabled"
@@ -119,7 +129,7 @@ class UserProfile extends Component {
         <div className="col-3 font-weight-bold pr-2">Location:</div>
         <div className="col-9">
           <div className="col-12 pl-0">
-            {this.props.user.Street},
+            {this.state.user.Street},
             <button
               className="btn btn-secondary py-0 disabled"
               style={{ height: "24px", fontSize: "10px" }}
@@ -127,21 +137,34 @@ class UserProfile extends Component {
               edit
             </button>
           </div>
-          <div className="col-12 pl-0">{this.props.user.City},</div>
-          <div className="col-12 pl-0 ">{this.props.user.State},</div>
-          <div className="col-12 pl-0">{this.props.user.Country}</div>
+          <div className="col-12 pl-0">{this.state.user.City},</div>
+          <div className="col-12 pl-0 ">{this.state.user.State},</div>
+          <div className="col-12 pl-0">{this.state.user.Country}</div>
         </div>
       </div>
     );
   };
   showFriends = () => {
-    if (this.props.user.friends)
+    if (this.state.user.friends)
       return (
         <div className="col-12">
-          {this.props.user.friends.map((friend, id) => (
-            <Link to={"/messages/" + friend.uid} className="btn btn-dark mr-1">
-              {friend.name}
-            </Link>
+          {this.state.user.friends.map((friend, id) => (
+            <div className="d-flex border-bottom">
+              <div className="flex-shrink-1">{friend.name}</div>
+              <div className="flex-grow-1"></div>
+              <Link
+                to={"/messages/" + friend.uid}
+                className="btn btn-dark mr-1"
+              >
+                Message
+              </Link>
+              <Link
+                to={"/remoteProfile/" + friend.uid}
+                className="btn btn-dark d-inline-flex mr-1"
+              >
+                Go To Profile
+              </Link>
+            </div>
           ))}
         </div>
       );
@@ -159,9 +182,9 @@ class UserProfile extends Component {
         });
   };
   addFriend = (id, name) => {
-    this.props.stitch.client
-      .callFunction("addFriend", [{ id: id, name: name }])
-      .then(this.props.user.friends.push({ uid: id, name: name }));
+    this.props.stitch.client.callFunction("addFriend", [
+      { id: id, name: name },
+    ]);
   };
   SearchedFriends = () => {
     if (this.state.otherUsers == null) {
@@ -172,7 +195,10 @@ class UserProfile extends Component {
         <div className="col-12">
           {Object.keys(this.state.Users).map((userId) => {
             if (
-              this.check(this.state.searchUser, this.state.Users[userId].name)
+              this.checkForSearch(
+                this.state.searchUser,
+                this.state.Users[userId].name
+              )
             )
               return (
                 <div className="col-12 px-0 btn-group">
@@ -182,13 +208,13 @@ class UserProfile extends Component {
                   >
                     {this.state.Users[userId].name}
                   </Link>
-                  {this.props.user.friends[this.state.Users[userId].userId] ? (
+                  {this.state.user.friends[this.state.Users[userId].userId] ? (
                     <>
-                      {this.props.user.friends[this.state.Users[userId].userId]
+                      {this.state.user.friends[this.state.Users[userId].userId]
                         .confirmed ? (
                         <Link
                           className="col-4 flex-shrink-1 btn btn-dark"
-                          to={"message/" + this.props.userId}
+                          to={"message/" + this.state.userId}
                         >
                           Message
                         </Link>
@@ -199,17 +225,24 @@ class UserProfile extends Component {
                       )}
                     </>
                   ) : (
-                    <button
-                      className="col-4 flex-shrink-1 btn btn-dark"
-                      onClick={() => {
-                        this.addFriend(
-                          this.state.Users[userId].userId,
-                          this.state.Users[userId].name
-                        );
-                      }}
-                    >
-                      Add Friend
-                    </button>
+                    <>
+                      <Link
+                        to={"/remoteProfile/" + this.state.Users[userId].userId}
+                      >
+                        Show Profile
+                      </Link>
+                      <button
+                        className="col-4 flex-shrink-1 btn btn-dark"
+                        onClick={() => {
+                          this.addFriend(
+                            this.state.Users[userId].userId,
+                            this.state.Users[userId].name
+                          );
+                        }}
+                      >
+                        Add Friend
+                      </button>
+                    </>
                   )}
                 </div>
               );
@@ -241,19 +274,19 @@ class UserProfile extends Component {
     return <div className="col-12">{this.SearchFriendsBar()}</div>;
   };
   showTeams = () => {
-    console.log(this.props.user);
-    if (Object.keys(this.props.user.teams).length == 0)
+    console.log(this.state.user);
+    if (Object.keys(this.state.user.teams).length == 0)
       return <div>No Teams (Add a new team to start)</div>;
     else
       return (
         <div className="col-12">
-          {Object.keys(this.props.user.teams).map((teamId) => (
+          {Object.keys(this.state.user.teams).map((teamId) => (
             <Link
-              to="/team/"
+              to="/scrum/"
               className="btn btn-secondary col-12 my-1 mx-0"
               key={teamId}
             >
-              {this.props.user.teams[teamId]}-
+              {this.state.user.teams[teamId]}-
               {teamId.substring(teamId.length - 4, teamId.length)}
             </Link>
           ))}
@@ -265,7 +298,9 @@ class UserProfile extends Component {
     console.log(name);
     if (name.trim() === "") return;
     await this.props.stitch.client
-      .callFunction("CreateNewTeam", [{ name: name }])
+      .callFunction("CreateNewTeam", [
+        { name: name, userName: this.state.user.name },
+      ])
       .then((result) => {
         console.log("succesful");
         console.log(result);
@@ -352,276 +387,63 @@ class UserProfile extends Component {
     );
   };
   render() {
-    return (
-      <div className="overflow-auto flex-grow-1">
-        <main className="d-flex mt-md-5 justify-content-center">
-          <div className="row col-sm-12 col-md-10 col-lg-8 justify-content-center bg-light shadow px-0">
-            <div className="col-12 text-center border-bottom display-4 py-5">
-              {this.props.user.name}
+    if (this.state.user)
+      return (
+        <div className="overflow-auto flex-grow-1">
+          <main className="d-flex mt-md-5 justify-content-center">
+            <div className="row col-sm-12 col-md-10 col-lg-8 justify-content-center bg-light shadow px-0">
+              <div className="col-12 text-center border-bottom display-4 py-5">
+                {this.state.user.name}
+              </div>
+              <div className="col-4 border-right pb-5">
+                <button
+                  className={
+                    this.state.selectedTab == "Overview"
+                      ? "col-12 btn btn btn-light text-primary"
+                      : "col-12 btn btn-light text-secondary"
+                  }
+                  onClick={() => this.setState({ selectedTab: "Overview" })}
+                >
+                  Overview
+                </button>
+                <button
+                  className={
+                    this.state.selectedTab == "Friends"
+                      ? "col-12 btn btn btn-light text-primary"
+                      : "col-12 btn btn-light text-secondary"
+                  }
+                  onClick={() => this.setState({ selectedTab: "Friends" })}
+                >
+                  Friends
+                </button>
+                <button
+                  className={
+                    this.state.selectedTab == "Teams"
+                      ? "col-12 btn btn btn-light text-primary"
+                      : "col-12 btn btn-light text-secondary"
+                  }
+                  onClick={() => this.setState({ selectedTab: "Teams" })}
+                >
+                  Teams
+                </button>
+                <button
+                  className={
+                    this.state.selectedTab == "Settings"
+                      ? "col-12 btn btn btn-light text-primary"
+                      : "col-12 btn btn-light text-secondary"
+                  }
+                  onClick={() => this.setState({ selectedTab: "Settings" })}
+                >
+                  Settings
+                </button>
+              </div>
+              <div className="col-8">{this.mainPanel()}</div>
             </div>
-            <div className="col-4 border-right pb-5">
-              <button
-                className={
-                  this.state.selectedTab == "Overview"
-                    ? "col-12 btn btn btn-light text-primary"
-                    : "col-12 btn btn-light text-secondary"
-                }
-                onClick={() => this.setState({ selectedTab: "Overview" })}
-              >
-                Overview
-              </button>
-              <button
-                className={
-                  this.state.selectedTab == "Friends"
-                    ? "col-12 btn btn btn-light text-primary"
-                    : "col-12 btn btn-light text-secondary"
-                }
-                onClick={() => this.setState({ selectedTab: "Friends" })}
-              >
-                Friends
-              </button>
-              <button
-                className={
-                  this.state.selectedTab == "Teams"
-                    ? "col-12 btn btn btn-light text-primary"
-                    : "col-12 btn btn-light text-secondary"
-                }
-                onClick={() => this.setState({ selectedTab: "Teams" })}
-              >
-                Teams
-              </button>
-              <button
-                className={
-                  this.state.selectedTab == "Settings"
-                    ? "col-12 btn btn btn-light text-primary"
-                    : "col-12 btn btn-light text-secondary"
-                }
-                onClick={() => this.setState({ selectedTab: "Settings" })}
-              >
-                Settings
-              </button>
-            </div>
-            <div className="col-8">{this.mainPanel()}</div>
-          </div>
-        </main>
-      </div>
-    );
+          </main>
+        </div>
+      );
+    else return <div></div>;
   }
 }
 
 export default withStitch(UserProfile);
-
-/*
-import "./Profile.css";
-class Profile extends Component {
-  constructor(props) {
-    super(props);
-    console.log(props);
-  }
-  static contextType = UserContext;
-
-  render() {
-    const { updateUser } = this.context;
-
-    const user = this.props.stitch.client.auth.currentUser.customData;
-
-    return (
-      <div className="container emp-profile">
-        <form method="post">
-          <div className="row">
-            <div className="col-md-4">
-              <div className="profile-img">
-                <img
-                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS52y5aInsxSm31CvHOFHWujqUx_wWTS9iM6s7BAm21oEN_RiGoog"
-                  alt=""
-                />
-                <img
-                  src="https://www.pngitem.com/pimgs/m/30-307416_profile-icon-png-image-free-download-searchpng-employee.png"
-                  alt="user profile here"
-                ></img>
-                <div className="file btn btn-lg btn-primary">
-                  Change Photo
-                  <input className="btn btn-dark" type="file" name="file" />
-                </div>
-              </div>
-            </div>
-            <div className="col-md-6">
-              <div className="profile-head">
-                <h6>{user.userName ? user.userName : "UserName"}</h6>
-                <p className="proile-rating">
-                  RANKINGS : <span>8/10</span>
-                </p>
-                <ul className="nav nav-tabs" id="myTab" role="tablist">
-                  <li className="nav-item">
-                    <a
-                      className="nav-link active"
-                      id="home-tab"
-                      data-toggle="tab"
-                      href="#home"
-                      role="tab"
-                      aria-controls="home"
-                      aria-selected="true"
-                    >
-                      About
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a
-                      className="nav-link"
-                      id="profile-tab"
-                      data-toggle="tab"
-                      href="#profile"
-                      role="tab"
-                      aria-controls="profile"
-                      aria-selected="false"
-                    >
-                      Timeline
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div className="col-md-2">
-              <input
-                type="submit"
-                className="profile-edit-btn"
-                name="btnAddMore"
-                value="Edit Profile"
-              />
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-md-4">
-              <div className="profile-work">
-                <p>WORK LINK</p>
-                <a href="">Website Link</a>
-                <br />
-                <a href="">Bootsnipp Profile</a>
-                <br />
-                <a href="">Bootply Profile</a>
-                <p>SKILLS</p>
-                <a href="">Web Designer</a>
-                <br />
-                <a href="">Web Developer</a>
-                <br />
-                <a href="">WordPress</a>
-                <br />
-                <a href="">WooCommerce</a>
-                <br />
-                <a href="">PHP, .Net</a>
-                <br />
-              </div>
-            </div>
-            <div className="col-md-8">
-              <div className="tab-content profile-tab" id="myTabContent">
-                <div
-                  className="tab-pane fade show active"
-                  id="home"
-                  role="tabpanel"
-                  aria-labelledby="home-tab"
-                >
-                  <div className="row">
-                    <div className="col-md-6">
-                      <label>User Id</label>
-                    </div>
-                    <div className="col-md-6">
-                      <p>{user.userId}</p>
-                    </div>
-                  </div>
-                  <div className="row">
-                    <div className="col-md-6">
-                      <label>Company Name</label>
-                    </div>
-                    <div className="col-md-6">
-                      <p>{user.companyName}</p>
-                    </div>
-                  </div>
-                  <div className="row">
-                    <div className="col-md-6">
-                      <label>Company EMS iD</label>
-                    </div>
-                    <div className="col-md-6">
-                      <p>{user.ems_id}</p>
-                    </div>
-                  </div>
-                  <div className="row">
-                    <div className="col-md-6">
-                      <label>Phone</label>
-                    </div>
-                    <div className="col-md-6">
-                      <p>123 456 7890</p>
-                    </div>
-                  </div>
-                  <div className="row">
-                    <div className="col-md-6">
-                      <label>Profession</label>
-                    </div>
-                    <div className="col-md-6">
-                      <p>Web Developer and Designer</p>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  className="tab-pane fade"
-                  id="profile"
-                  role="tabpanel"
-                  aria-labelledby="profile-tab"
-                >
-                  <div className="row">
-                    <div className="col-md-6">
-                      <label>Experience</label>
-                    </div>
-                    <div className="col-md-6">
-                      <p>Expert</p>
-                    </div>
-                  </div>
-                  <div className="row">
-                    <div className="col-md-6">
-                      <label>Hourly Rate</label>
-                    </div>
-                    <div className="col-md-6">
-                      <p>10$/hr</p>
-                    </div>
-                  </div>
-                  <div className="row">
-                    <div className="col-md-6">
-                      <label>Total Projects</label>
-                    </div>
-                    <div className="col-md-6">
-                      <p>230</p>
-                    </div>
-                  </div>
-                  <div className="row">
-                    <div className="col-md-6">
-                      <label>English Level</label>
-                    </div>
-                    <div className="col-md-6">
-                      <p>Expert</p>
-                    </div>
-                  </div>
-                  <div className="row">
-                    <div className="col-md-6">
-                      <label>Availability</label>
-                    </div>
-                    <div className="col-md-6">
-                      <p>6 months</p>
-                    </div>
-                  </div>
-                  <div className="row">
-                    <div className="col-md-12">
-                      <label>Your Bio</label>
-                      <br />
-                      <p>Your detail description</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </form>
-      </div>
-    );
-  }
-}
-export default withStitch(withUserContext(Profile));
-*/

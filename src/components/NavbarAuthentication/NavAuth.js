@@ -10,6 +10,9 @@ class NavAuth extends Component {
         <Link to="/messages" className="btn btn-dark">
           Messages
         </Link>
+        <Link to="/scrum" className="btn btn-dark">
+          Teams
+        </Link>
         <button className="btn btn-dark">Sign Out</button>
       </div>
     );

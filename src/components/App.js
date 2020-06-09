@@ -18,20 +18,29 @@ import Navbar from "./Navbar";
 import FirstLoginData from "./FirstLoginData";
 import CommuncationsPage from "./Communications";
 import Messages from "./Messages";
+import Scrum from "./Scrum";
 
 //
 import InputFields from "./InputFields";
 import Profile from "./Profile";
 import bg from "./ElCapitan.jpg";
+import RemoteProfile from "./RemoteProfile";
 
 class App extends Component {
   state = { user: null, auth: null };
   componentDidUpdate() {
-    if (this.state.auth != this.props.stitch.auth) {
+    console.log(this.state);
+    console.log(this.props);
+    if (
+      this.state.auth != this.props.stitch.client.auth.currentUser.customData
+    ) {
       console.log(this.props.stitch);
-      this.setState({ auth: this.props.stitch.auth });
+      this.setState({
+        auth: this.props.stitch.client.auth.currentUser.customData,
+      });
     }
     //this.updateUserData();
+    this.watcher();
   }
   componentDidMount() {
     this.props.stitch.setUpdateAppjs((user) => {
@@ -39,6 +48,27 @@ class App extends Component {
     });
     this.updateUserData();
   }
+  watcher = async () => {
+    // Create a change stream that watches the collection
+    // for when any document's 'status' field is changed
+    // to the string 'blocked'.
+
+    const MessagesCollection = this.props.stitch.mongodb
+      .db("Users")
+      .collection("Users");
+    const stream = await MessagesCollection.watch({
+      $or: [
+        {
+          "fullDocument.userId": this.props.stitch.client.auth.currentUser.id,
+        },
+      ],
+    });
+    // Set up a change event handler function for the stream
+    stream.onNext((event) => {
+      console.log(event.fullDocument);
+      this.props.stitch.client.auth.refreshCustomData();
+    });
+  };
   updateUserData = async () => {
     if (this.props.stitch.client.auth.currentUser) {
       console.log("Refreshing user data on page refresh");
@@ -84,7 +114,7 @@ class App extends Component {
             <InputFields />
           </Route>
           <Route path="/Profile">
-            <Profile user={this.state.user} />
+            <Profile />
           </Route>
           <Route path="/ConfirmMail" component={ConfirmEmail} />
           <Route path="/ResetPassword">
@@ -92,6 +122,13 @@ class App extends Component {
           </Route>
           <Route path="/messages">
             <Messages />
+          </Route>
+          <Route
+            path="/remoteProfile/:id?"
+            render={(props) => <RemoteProfile />}
+          />
+          <Route path="/scrum">
+            <Scrum user={this.state.user} />
           </Route>
           <Route path="/">
             <SignUp />
